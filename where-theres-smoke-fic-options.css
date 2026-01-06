@@ -72,54 +72,6 @@
   position: absolute;
 }
 
-#workskin .option-pronoun-subject-target:after {
-  content: 'they';
-}
-
-#workskin .option-pronoun-object-target:after {
-  content: 'them';
-}
-
-#workskin .option-pronoun-possessive-adjective-target:after {
-  content: 'their';
-}
-
-#workskin .option-pronoun-possessive-target:after {
-  content: 'theirs';
-}
-
-#workskin div.options:has(.option-she:focus) ~ p .option-pronoun-subject-target:after {
-  content: 'she';
-}
-
-#workskin div.options:has(.option-she:focus) ~ p .option-pronoun-object-target:after {
-  content: 'her';
-}
-
-#workskin div.options:has(.option-she:focus) ~ p .option-pronoun-possessive-adjective-target:after {
-  content: 'her';
-}
-
-#workskin div.options:has(.option-she:focus) ~ p .option-pronoun-possessive-target:after {
-  content: 'hers';
-}
-
-#workskin div.options:has(.option-he:focus) ~ p .option-pronoun-subject-target:after {
-  content: 'he';
-}
-
-#workskin div.options:has(.option-he:focus) ~ p .option-pronoun-object-target:after {
-  content: 'him';
-}
-
-#workskin div.options:has(.option-he:focus) ~ p .option-pronoun-possessive-adjective-target:after {
-  content: 'his';
-}
-
-#workskin div.options:has(.option-he:focus) ~ p .option-pronoun-possessive-target:after {
-  content: 'his';
-}
-
 #workskin div:has(.option-they:focus) ~ p .option-they-target {
   display: inline;
 }

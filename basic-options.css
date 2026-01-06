@@ -1,0 +1,222 @@
+/*
+Basic CSS to be modified for future fics.
+The premise relies on having one focussed link on the page. A focussed link is the last link the user clicked, and is unset if they click anything else.
+You will need make code/links for each choice AND option.
+
+So, 2 choices of 3 options will have 12 overall buttons (example below, with choice A have 3 and B having 9).
+Additionally, since later options depend on earlier options, changing Choice A will reset Choice B
+
+In this documents, buttons are named option-1, option-a, etc, and the parts of the fic that they show/hide are option-1-target, option-a-target, etc
+#workskin - this is the ID of an element around the fic. It's added automatically, you don't need to worry about it.
+
+CSS Basics:
+ * CSS is a series of selectors and styles. Selectors can be classes (.option-a) or ids (#workskin) or elements (p) or a ton of other things
+ * The symbol at the beginning of the selector notates what type they are
+ * Stringing selectors together narrows the scope of the selector and allows you to make it more specific (like tags). So .option-1 selects everything with the class option-1. p.option-1 only selectes paragraphs with the option-1 class
+ * There are some unusual slectors; I try to notate when I use them.
+ * Styles can be applied to multiple selectors by listing selectors separated by a comma.
+ * A more specific selector's styles will override a less specific selector. 
+ * Exception: styles marked !important. You should not abuse the !important 
+*/
+
+/**
+    OPTIONS SELECTOR
+**/
+
+/* 
+This displays links as buttons, change styling as you wish. 
+Can use images by setting background.
+
+In my exmaple, these classes are used on ALL the options. Feel free to make a more generic class to denote buttons
+*/
+#workskin .option-1,
+#workskin .option-2,
+#workskin .option-3 {
+  display: inline-block;
+  padding: 10px;
+  margin: 5px;
+  background: white;
+  color: black;
+  border: 1px solid black;
+}
+
+/* This sets the background of focussed links to yellow, to give the end user some feedback */
+#workskin .option-1:focus,
+#workskin .option-2:focus,
+#workskin .option-3:focus,
+#workskin div.options:has(.option-1:focus) .choice-number .option-1,
+#workskin div.options:has(.option-2:focus) .choice-number .option-2,
+#workskin div.options:has(.option-3:focus) .choice-number .option-3,
+/* these 2 lines are a failsafe to give a default "select" style if the user hasn't selected anything */
+/* defaults are option-1 and option-a */
+#workskin div.options:not(:has(a:focus)) .choice-number .option-1,
+#workskin div.options .choice-letter:not(:has(a:focus)) .option-a {
+  background: yellow;
+}
+
+/* This hides the options that are not 1 if the user hasn't made a selection*/
+#workskin .choice-letter .option-2,
+#workskin .choice-letter .option-3 {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  position: absolute;
+}
+
+/* This is saying if option-2 is selected, then show option-2 stuff
+The ~ is a sibling selector, which means where this is located in the page matters. 
+.option-2:focus must be a sibling of .choice-letter -> .option-2
+If you use the HTML provided this shoudln't be a huge issue.
+
+*/
+#workskin p:has(.option-2:focus) ~ p.choice-letter .option-2,
+#workskin p.choice-letter:has(.option-2:focus) .option-2 {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  display: inline-block;
+  position: relative;
+}
+
+/* This is saying if option-2 is selected, then hide the other options.
+This *should* also hide these from screen readers
+*/
+#workskin p:has(.option-2:focus) ~ p.choice-letter .option-1,
+#workskin p:has(.option-2:focus) ~ p.choice-letter .option-3,
+#workskin p.choice-letter:has(.option-2:focus) .option-1,
+#workskin p.choice-letter:has(.option-2:focus) .option-3 {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  display: inline-block;
+  position: absolute;
+}
+
+/* The above code repeats for all the other options. You can technically combine them all into one big thing like...
+
+#workskin p:has(.option-2:focus) ~ p.choice-letter .option-2,
+#workskin p.choice-letter:has(.option-2:focus) .option-2,
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-3,
+#workskin p.choice-letter:has(.option-3:focus) .option-3  {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  display: inline-block;
+  position: relative;
+} 
+  and 
+  #workskin p:has(.option-2:focus) ~ p.choice-letter .option-1,
+#workskin p:has(.option-2:focus) ~ p.choice-letter .option-3,
+#workskin p.choice-letter:has(.option-2:focus) .option-1,
+#workskin p.choice-letter:has(.option-2:focus) .option-3,
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-1,
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-2,
+#workskin p.choice-letter:has(.option-3:focus) .option-1,
+#workskin p.choice-letter:has(.option-3:focus) .option-2 {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  display: inline-block;
+  position: absolute;
+}
+
+but it makes my eyes glaze over.
+*/
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-3,
+#workskin p.choice-letter:has(.option-3:focus) .option-3 {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  display: inline-block;
+  position: relative;
+}
+
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-1,
+#workskin p:has(.option-3:focus) ~ p.choice-letter .option-2,
+#workskin p.choice-letter:has(.option-3:focus) .option-1,
+#workskin p.choice-letter:has(.option-3:focus) .option-2 {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  display: inline-block;
+  position: absolute;
+}
+
+/***
+    FIC CODE
+***/
+
+/* If option-1 is focussed, show all elements with the option-1-target class */
+#workskin div:has(.option-1:focus) ~ p .option-1-target {
+  display: inline;
+}
+
+/* If option-1 is focussed, hide all elements with the option-2-target or option-3-target class
+  Note the important - this forces this style to override other styles.
+*/
+#workskin div:has(.option-1:focus) ~ p .option-2-target,
+#workskin div:has(.option-1:focus) ~ p .option-3-target {
+  display: none !important;
+}
+
+/* Rinse and repeat! Again, you can combine all of these */
+#workskin div:has(.option-2:focus) ~ p .option-2-target {
+  display: inline;
+}
+
+#workskin div:has(.option-2:focus) ~ p .option-1-target,
+#workskin div:has(.option-2:focus) ~ p .option-3-target {
+  display: none !important;
+}
+
+#workskin div:has(.option-3:focus) ~ p .option-3-target {
+  display: inline;
+}
+
+#workskin div:has(.option-3:focus) ~ p .option-1-target,
+#workskin div:has(.option-3:focus) ~ p .option-2-target {
+  display: none !important;
+}
+
+/* This sets .option-a-target to show if nothing is selected */
+#workskin .option-a-target {
+  display: inline;
+}
+
+/* This sets .all other options to be hidden if we don't have anything selected */
+#workskin .option-2-target,
+#workskin .option-3-target,
+#workskin .option-b-target,
+#workskin .option-c-target {
+  display: none;
+}
+
+/* Another round of showing and hiding! */
+#workskin div:has(.option-a:focus) ~ p .option-a-target {
+  display: inline;
+}
+
+#workskin div:has(.option-a:focus) ~ p .option-b-target,
+#workskin div:has(.option-a:focus) ~ p .option-c-target {
+  display: none !important;
+}
+
+#workskin div:has(.option-b:focus) ~ p .option-b-target {
+  display: inline;
+}
+
+#workskin div:has(.option-b:focus) ~ p .option-a-target,
+#workskin div:has(.option-b:focus) ~ p .option-c-target {
+  display: none !important;
+}
+
+#workskin div:has(.option-c:focus) ~ p .option-c-target {
+  display: inline;
+}
+
+#workskin div:has(.option-c:focus) ~ p .option-a-target,
+#workskin div:has(.option-c:focus) ~ p .option-b-target {
+  display: none !important;
+}
+
+/** That's that! Check out the HTML next! */
